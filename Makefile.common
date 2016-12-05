@@ -1,0 +1,10 @@
+CPP         = g++
+CPP_FLAGS   = -O2 -Wall
+NVCC        = nvcc
+NVCC_FLAGS  = -cudart=shared 
+BEG_X_FLAGS = -Xcompiler="
+END_X_FLAGS = "
+
+RM          = rm
+RM_FLAGS    = -f
+
