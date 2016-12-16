@@ -1,9 +1,13 @@
 CPP         = g++
-CPP_FLAGS   = -O2 -Wall
+CPP_FLAGS   = -MD -c -O2 -Wall
 NVCC        = nvcc
-NVCC_FLAGS  = -cudart=shared 
+NVCC_FLAGS  = -c -cudart=shared 
+CPPNV_FLAGS = -c -O2 -Wall
 BEG_X_FLAGS = -Xcompiler="
 END_X_FLAGS = "
+INC_COMMON  = -I$(shell pwd)/../common
+LD          = g++
+CULD        = nvcc
 
 RM          = rm
 RM_FLAGS    = -f

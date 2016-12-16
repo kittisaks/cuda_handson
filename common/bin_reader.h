@@ -167,7 +167,7 @@ int CheckBinTypeCompatibility(const std::type_info & t, BinType * type)
 }
 
 template <typename T> int binReadAsArray(
-    const char * filename, BinInfo * bi, T ** arr) {
+    const char * filename, BinInfo * bi, T ** arr, size_t * count) {
 
     if (arr == NULL)
         return -1;
@@ -186,12 +186,13 @@ template <typename T> int binReadAsArray(
     if (ibi.type != type)
         return -1;
 
-    uint64_t count = (ibi.size - ibi.offset) / sizeof(T);
-    T * iarr = new T [count];
+    uint64_t cnt = (ibi.size - ibi.offset) / sizeof(T);
+    T * iarr = new T [cnt];
     ibi.ref.handle->seekg(ibi.offset, std::ios::beg);
     ibi.ref.handle->read((char *) iarr, ibi.size);
 
     *arr = iarr;
+    *count = cnt;
     if (bi != NULL)
         *bi = ibi;
 
@@ -203,7 +204,7 @@ template <typename T> int binReadAsArray(
 }
 
 template <typename T> int binReadAsArrayNP(
-    const char * filename, BinInfo * bi, T ** arr) {
+    const char * filename, BinInfo * bi, T ** arr, size_t * count) {
 
     if (arr == NULL)
         return -1;
@@ -228,6 +229,7 @@ template <typename T> int binReadAsArrayNP(
     T * data = reinterpret_cast<T *>(
         reinterpret_cast<char *>(ptr) + ibi.offset);
     *arr = data;
+    *count = (ibi.size - ibi.offset) / sizeof(T);
     if (bi != NULL)
         *bi = ibi;
 

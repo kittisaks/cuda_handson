@@ -2,7 +2,6 @@
 #include <stdlib.h>
 #include "bin_reader.h"
 #include "timer.h"
-#include "cuda.h"
 
 int main(int argc, char ** argv) {
 
@@ -13,16 +12,15 @@ int main(int argc, char ** argv) {
     for (size_t idx=0;idx<1000;idx++)
         printf("%.4f\n", vectorA[idx]);
 #else
+    size_t count;
     float * vectorA;
     BinInfo bi;
-    if (binReadAsArrayNP<float>("gold/vecA.bin", &bi, &vectorA) == -1)
+    if (binReadAsArrayNP<float>("gold/vecA.bin", &bi, &vectorA, &count) == -1)
         printf("ERROR!\n");
 
     for (size_t idx=0;idx<1000;idx++)
         printf("%.4f\n", vectorA[idx]);
 
-    void * memd;
-    cudaMalloc(&memd, bi.size);
 #endif
 
     return 0;
