@@ -32,13 +32,13 @@ $(GEN_TARGET): $(GEN_OBJ)
 	$(LD) $^ -o $@
 
 $(CPU_TARGET): $(CPU_OBJ)
-	$(LD) $^ -o $@
+	$(LD) $^ -fopenmp  -o $@
 
 $(GPU_TARGET): $(GPU_OBJ)
 	$(CULD) $^ -o  $@
 
 $(OBJ_DIR)/%.o:%.cpp
-	$(CPP) $(INC_COMMON) $(CPP_FLAGS) $< -o $@
+	$(CPP) $(INC_COMMON) -fopenmp $(CPP_FLAGS) $< -o $@
 
 $(OBJ_DIR)/%.o:%.cu
 	$(NVCC) $(INC_COMMON) $(NVCC_FLAGS) $(BEG_X_FLAGS) $(CPPNV_FLAGS) $(END_X_FLAGS) $< -o $@
