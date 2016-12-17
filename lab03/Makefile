@@ -1,11 +1,11 @@
 
-GEN_TARGET = vaddgen
-CPU_TARGET = vaddcpu
-GPU_TARGET = vaddgpu
+GEN_TARGET = matgen
+CPU_TARGET = matcpu
+GPU_TARGET = matgpu
 
-GEN_SRC = vaddgen.cpp
-CPU_SRC = vaddcpu.cpp
-GPU_SRC = vaddgpu.cu
+GEN_SRC = matgen.cpp
+CPU_SRC = matcpu.cpp
+GPU_SRC = matgpu.cu
 
 ########## DO NOT MODIFIED BELOW; UNLESS YOU KNOW WHAT YOU ARE DOING ##########
 

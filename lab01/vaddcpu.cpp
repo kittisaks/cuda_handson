@@ -32,7 +32,7 @@ int main(int argc, char ** argv) {
 
     omp_set_num_threads(4);
 
-    #pragma parallel for shared(vecc_h, veca_h, vecb_h)
+    #pragma omp parallel for shared(vecc_h, veca_h, vecb_h)
     for (size_t i=0;i<count;i++)
         vecc_h[i] = veca_h[i] + vecb_h[i];
 
