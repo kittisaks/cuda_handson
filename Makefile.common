@@ -1,5 +1,9 @@
+CUDA_DIR    = /usr/local/cuda
+CUDA_LIB    = $(CUDA_DIR)/lib64
+CUDA_INC    = $(CUDA_DIR)/include
+
 CPP         = g++
-CPP_FLAGS   = -MD -c -g -O2 -Wall
+CPP_FLAGS   = -MD -c -g -O2 -Wall -I$(CUDA_INC)
 NVCC        = nvcc
 NVCC_FLAGS  = -c -g -cudart=shared 
 CPPNV_FLAGS = -c -g -O2 -Wall

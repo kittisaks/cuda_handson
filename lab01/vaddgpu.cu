@@ -33,13 +33,13 @@ __global__ void vectorAddB(float * vectorA, float * vectorB, float * vectorC, un
 
     int threadId = (blockIdx.x * blockDim.x) + threadIdx.x;
 
-    int totalThread = gridDim.x * blockDim.x;
-    int stride = count / totalThread;
-    int remainder = count % totalThread;
+    int totalThreads = gridDim.x * blockDim.x;
+    int stride = count / totalThreads;
+    int remainder = count % totalThreads;
     stride += (remainder) ? 1 : 0;
 
     for (int i=0;i<stride;i++) {
-        unsigned long idx = (i * totalThread) + threadId;
+        unsigned long idx = (i * totalThreads) + threadId;
         if (idx < count)
             vectorC[idx] = vectorA[idx] + vectorB[idx];
     }

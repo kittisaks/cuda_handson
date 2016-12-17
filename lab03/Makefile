@@ -1,11 +1,11 @@
 
 GEN_TARGET = matgen
-CPU_TARGET = matcpu
-GPU_TARGET = matgpu
+CPU_TARGET = mmcpu
+GPU_TARGET = mmgpu
 
 GEN_SRC = matgen.cpp
-CPU_SRC = matcpu.cpp
-GPU_SRC = matgpu.cu
+CPU_SRC = mmcpu.cpp
+GPU_SRC = mmgpu.cpp mmkernel.cu
 
 ########## DO NOT MODIFIED BELOW; UNLESS YOU KNOW WHAT YOU ARE DOING ##########
 
