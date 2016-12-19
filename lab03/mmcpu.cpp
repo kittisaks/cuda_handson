@@ -30,8 +30,12 @@ int main(int argc, char ** argv) {
     size_t  count;
     char    mata_fn[128], matb_fn[128], matc_fn[128];
 
+    //Timers
+    Timer dataLoad_tm, comp_tm;
+
     //Loading matrix-A and -B from file for matrix multiplication
     //Loading matrix-C from file for verifying the result produced by CPU
+    dataLoad_tm.Start();
     sprintf(mata_fn, "vecA_%ld.bin", dim);
     sprintf(matb_fn, "vecB_%ld.bin", dim);
     sprintf(matc_fn, "vecC_%ld.bin", dim);
@@ -39,8 +43,10 @@ int main(int argc, char ** argv) {
     CHECK(    binReadAsArrayNP<float>(matb_fn, NULL, &matb_h, &count));
     CHECK(    binReadAsArrayNP<float>(matc_fn, NULL, &matc_hv, &count));
     matc_h = new float [dim * dim];
+    dataLoad_tm.Stop();
 
     //Perform matrix multiplication on CPU
+    comp_tm.Start();
     #pragma omp parallel for
     for (size_t iIdx=0;iIdx<dim;iIdx++) {
         size_t i = iIdx * dim;
@@ -55,6 +61,7 @@ int main(int argc, char ** argv) {
             }
         }
     }
+    comp_tm.Stop();
 
     //Verify the results
     for (size_t idx=0;idx<dim * dim;idx++) {
@@ -73,6 +80,13 @@ int main(int argc, char ** argv) {
     CHECK(    binDiscardArrayNP(matb_h));
     CHECK(    binDiscardArrayNP(matc_hv));
     delete [] matc_h;
+
+    //Show timing results
+    Timer::Duration dataLoad_dur = dataLoad_tm.GetDuration();
+    Timer::Duration comp_dur = comp_tm.GetDuration();
+    printf("\n===== Time used =====\n");
+    printf("Data load:   %.2f\tus\n", dataLoad_dur.raw);
+    printf("Computation: %.2f\tus\n\n\n", comp_dur.raw);
 
     return 0;
 }

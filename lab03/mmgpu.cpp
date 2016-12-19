@@ -40,8 +40,11 @@ int main(int argc, char ** argv) {
     size_t  count;
     char    mata_fn[128], matb_fn[128], matc_fn[128];
 
+    Timer dataLoad_tm, cpu2gpu_tm, gpu2cpu_tm, comp_tm;
+
     //Loading matrix-A and -B from file for matrix multiplication
     //Loading matrix-C from file for verifying the result from GPU
+    dataLoad_tm.Start();
     sprintf(mata_fn, "vecA_%ld.bin", dim);
     sprintf(matb_fn, "vecB_%ld.bin", dim);
     sprintf(matc_fn, "vecC_%ld.bin", dim);
@@ -49,8 +52,10 @@ int main(int argc, char ** argv) {
     CHECK(    binReadAsArrayNP<float>(matb_fn, NULL, &matb_h, &count));
     CHECK(    binReadAsArrayNP<float>(matc_fn, NULL, &matc_hv, &count));
     matc_h = new float [dim * dim];
+    dataLoad_tm.Stop();
 
     //Allocate memory on GPU for matrices
+    cpu2gpu_tm.Start();
     size_t memSize = dim * dim * sizeof(float);
     CUCHECK(    cudaMalloc((void **) &mata_d, memSize));
     CUCHECK(    cudaMalloc((void **) &matb_d, memSize));
@@ -60,12 +65,17 @@ int main(int argc, char ** argv) {
     CUCHECK(    cudaMemcpy(mata_d, mata_h, memSize, cudaMemcpyHostToDevice));
     CUCHECK(    cudaMemcpy(matb_d, matb_h, memSize, cudaMemcpyHostToDevice));
     CUCHECK(    cudaMemset(matc_d, 0, memSize));
+    cpu2gpu_tm.Stop();
 
     //Perform matrix multiplication by invoking the kernel
+    comp_tm.Start();
     CUCHECK(    MatMul(mata_d, matb_d, matc_d, dim));
+    comp_tm.Stop();
 
     //Copy matrix-C which is the result from GPU back to the host
+    gpu2cpu_tm.Start();
     CUCHECK(    cudaMemcpy(matc_h, matc_d, memSize, cudaMemcpyDeviceToHost));
+    gpu2cpu_tm.Stop();
 
     //Verify the results copied back from GPU
     for (size_t idx=0;idx<dim * dim;idx++) {
@@ -87,6 +97,18 @@ int main(int argc, char ** argv) {
     CUCHECK(    cudaFree(mata_d));
     CUCHECK(    cudaFree(matb_d));
     CUCHECK(    cudaFree(matc_d));
+
+    //Show timing results
+    Timer::Duration dataLoad_dur = dataLoad_tm.GetDuration();
+    Timer::Duration cpu2gpu_dur = cpu2gpu_tm.GetDuration();
+    Timer::Duration comp_dur = comp_tm.GetDuration();
+    Timer::Duration gpu2cpu_dur = gpu2cpu_tm.GetDuration();
+
+    printf("\n===== Time used =====\n");
+    printf("Data load:           %.2f\tus\n", dataLoad_dur.raw);
+    printf("CPU-to-GPU transfer: %.2f\tus\n", cpu2gpu_dur.raw);
+    printf("Computation:         %.2f\tus\n", comp_dur.raw);
+    printf("GPU-to-CPU transfer: %.2f\tus\n\n\n", gpu2cpu_dur.raw);
 
     return 0;
 }
