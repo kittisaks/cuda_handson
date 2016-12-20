@@ -5,8 +5,10 @@ CUDA_INC    = $(CUDA_DIR)/include
 CPP         = g++
 CPP_FLAGS   = -MD -c -g -O2 -Wall -I$(CUDA_INC)
 NVCC        = nvcc
-NVCC_FLAGS  = -c -g -cudart=shared 
-CPPNV_FLAGS = -c -g -O2 -Wall
+NVCC_BFLAGS = -g -cudart=shared 
+NVCC_FLAGS  = -c $(NVCC_BFLAGS)
+CPPNV_BFLAGS= -g -O2 -Wall
+CPPNV_FLAGS = -c $(CPPNV_BFLAGS)
 BEG_X_FLAGS = -Xcompiler="
 END_X_FLAGS = "
 INC_COMMON  = -I$(shell pwd)/../common

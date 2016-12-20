@@ -13,10 +13,10 @@ clean:
 	$(RM) $(RM_FLAGS) $(TARGET_1)
 
 $(TARGET_0) : $(SRC_0)
-	$(NVCC) $(NVCC_FLAGS) $(BEG_X_FLAGS) $(CPP_FLAGS) $(END_X_FLAGS) $^ -o $@
+	$(NVCC) $(NVCC_BFLAGS) $(BEG_X_FLAGS) $(CPPNV_BFLAGS) $(END_X_FLAGS) $^ -o $@
 	@printf "Thread Identification (Full) Example Built.\n"
 
 $(TARGET_1) : $(SRC_1)
-	$(NVCC) $(NVCC_FLAGS) $(BEG_X_FLAGS) $(CPP_FLAGS) $(END_X_FLAGS) $^ -o $@
+	$(NVCC) $(NVCC_BFLAGS) $(BEG_X_FLAGS) $(CPPNV_BFLAGS) $(END_X_FLAGS) $^ -o $@
 	@printf "Thread Identification (Basic) Example Built.\n"
 

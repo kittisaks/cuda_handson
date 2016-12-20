@@ -55,8 +55,10 @@ __global__ void MyFirstKernel(
 
 int ParseArguments(int argc, char ** argv) {
 
-    if (argc == 1)
-        return 0;
+    if (argc == 1) {
+        cout << "Usage: " << argv[0] << " [gs.y] [gs.x] [bs.z] [bs.y] [bs.x]" << endl;
+        return -1;
+    }
 
     if (argc != 6) {
         cout << "Error: Not enough arguments specified." << endl;
